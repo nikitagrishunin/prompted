@@ -27,6 +27,9 @@
   input { width:100%; font:inherit; font-size:16px; color:var(--text); background:#0c0c0c; border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin:0 0 14px; }
   input:focus { outline:2px solid var(--accent); outline-offset:1px; border-color:transparent; }
   .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  .opt { display:flex; gap:10px; align-items:flex-start; margin:0 0 16px; font-size:14px; line-height:1.4; color:var(--muted); cursor:pointer; }
+  .opt input { width:18px; height:18px; margin:1px 0 0; padding:0; flex:0 0 auto; accent-color:var(--accent); }
+  .small a, footer a { color:var(--muted); }
   button { width:100%; font:inherit; font-weight:700; font-size:17px; color:#06141b; background:var(--accent); border:0; border-radius:10px; padding:14px; cursor:pointer; }
   button:disabled { opacity:.6; cursor:wait; }
   .small { font-size:13px; color:var(--muted); margin:12px 0 0; }
@@ -69,9 +72,10 @@
     <label for="email">Email</label>
     <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@gigachad.com">
     <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+    <label class="opt" for="optin"><input id="optin" name="optin" type="checkbox"><span>Yes, email me new Prompted guides. Optional - you get the folder either way.</span></label>
     <button id="go" type="submit">Send me the folder</button>
     <p class="msg" id="msg" role="status"></p>
-    <p class="small">Free. You'll get the folder right now and a short email when I post a new guide. Unsubscribe anytime.</p>
+    <p class="small">Free. You'll get the folder right now. With the box ticked, I'll also email you new guides (about once a week at most) - unsubscribe in one click anytime. <a href="../privacy/">Privacy Policy</a></p>
   </form>
   
 
@@ -88,12 +92,18 @@
     <p class="small">Answer the questions by voice, then say &quot;wrap up&quot; at the end of every session. Every prompt from the video is in PROMPTS.md inside the folder.</p>
   </section>
 
-  <footer>Prompted · Your email is stored with Kit and used only for Prompted emails.</footer>
+  <footer>Prompted · Your email is stored with Kit and used only for Prompted emails. · <a href="../privacy/">Privacy</a></footer>
 </main>
 <script>
 (function () {
   var ENDPOINT = "https://103-244-227-190.sslip.io/subscribe", TAG = "25873940";
   var f = document.getElementById("f"), go = document.getElementById("go"), msg = document.getElementById("msg");
+  // Согласие (решение владельца 15.11, вариант A): галочка заранее стоит у всех, кроме ЕС/ЕЭЗ, Великобритании и
+  // Канады (там закон требует активного согласия) и неизвестного пояса - там пустая.
+  var TZ = ""; try { TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
+  var CA = /^America\/(Toronto|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Montreal|Whitehorse|Yellowknife|Iqaluit|Moncton|Glace_Bay|Goose_Bay|Dawson|Dawson_Creek|Fort_Nelson|Creston|Cambridge_Bay|Rankin_Inlet|Resolute|Swift_Current|Inuvik|Atikokan|Nipigon|Thunder_Bay|Rainy_River|Pangnirtung|Blanc-Sablon)$|^Canada\//;
+  var STRICT = !TZ || /^Europe\//.test(TZ) || /^Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe)$/.test(TZ) || CA.test(TZ);
+  document.getElementById("optin").checked = !STRICT;
   function show() {
     f.style.display = "none";
     var c = document.querySelector(".pic-cta"); if (c) c.style.display = "none";
@@ -109,7 +119,8 @@
     if (!/^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/.test(email)) { msg.textContent = "Please check your email address."; return; }
     go.disabled = true; msg.textContent = "";
     fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, first_name: f.first_name.value.trim(), tag: TAG, website: f.website.value }) })
+      body: JSON.stringify({ email: email, first_name: f.first_name.value.trim(), tag: TAG, website: f.website.value,
+                             optin: document.getElementById("optin").checked, tz: TZ }) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { s: r.status, d: d }; }); })
       .then(function (x) {
         if (x.s === 200 && x.d.ok) { show(); return; }
