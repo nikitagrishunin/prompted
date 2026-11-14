@@ -39,15 +39,25 @@
   .ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
   a { color:var(--accent); }
   footer { margin-top:36px; font-size:12px; color:#6b6b6b; }
+  .pic { display:flex; align-items:flex-end; gap:14px; margin:18px 0 8px; }
+  .pic img { display:block; height:auto; -webkit-mask-image:linear-gradient(to bottom, #000 74%, transparent); mask-image:linear-gradient(to bottom, #000 74%, transparent); }
+  .pic-hero img { width:min(60%, 300px); }
+  .pic-cta { margin-top:4px; }
+  .pic-cta img { width:min(38%, 170px); }
+  .bubble { font-family:"JetBrains Mono", monospace; font-size:14px; line-height:1.35; color:var(--text); background:#0c0c0c; border:1px solid var(--accent); border-radius:14px 14px 14px 4px; padding:10px 12px; margin:0 0 34px; max-width:240px; }
+  .pic-after { display:block; margin:0 0 14px; }
+  .pic-after img { width:min(100%, 260px); border-radius:14px; border:1px solid var(--line); -webkit-mask-image:none; mask-image:none; filter:none; }
 </style>
 </head>
 <body>
 <main>
   <div class="brand">PROMPTED</div>
+  <figure class="pic pic-hero"><img src="img/hero.webp" alt="Nikita from Prompted, hands on head, amazed" width="640" height="417"><figcaption class="bubble">Wait... AI can actually remember me?!</figcaption></figure>
   <h1>Make AI remember you</h1>
   <p class="lead">Get the free Second Brain Starter - the folder that makes Claude Code or Codex remember you, your projects and your decisions.</p>
   <ul><li>Set it up with one sentence. The AI does the rest.</li><li>Works in Claude Code and Codex. Light version for free ChatGPT and your phone.</li><li>Every prompt from the video in one file.</li></ul>
 
+  <figure class="pic pic-cta"><img src="img/cta.webp" alt="Nikita from Prompted, arms crossed, knowing smile" width="480" height="402"><figcaption class="bubble">Yeah, bro. Grab it.</figcaption></figure>
   <form id="f" novalidate>
     <label for="name">First name (optional)</label>
     <input id="name" name="first_name" autocomplete="given-name" maxlength="60">
@@ -60,6 +70,7 @@
   </form>
 
   <section class="after" id="after">
+    <figure class="pic pic-after"><img src="img/after.webp" alt="Nikita from Prompted giving a thumbs up" width="640" height="640" loading="lazy"></figure>
     <h2>You&#x27;re in. Here&#x27;s your folder.</h2>
     <p>Open an empty folder in Claude Code or Codex and paste this:</p>
     <pre id="prompt">Set up my second brain from https://github.com/nikitagrishunin/second-brain-starter. Copy the folder structure here. Then interview me, one question at a time, to fill in CLAUDE.md: who I am, what I&#x27;m working on, how I make decisions, what matters most to me, and how I like my answers. Ask for the &quot;because&quot; behind every rule. Max 20 questions. Show me the file before you save it.</pre>
@@ -77,7 +88,11 @@
 (function () {
   var ENDPOINT = "https://103-244-227-190.sslip.io/subscribe", TAG = "25873940";
   var f = document.getElementById("f"), go = document.getElementById("go"), msg = document.getElementById("msg");
-  function show() { f.style.display = "none"; document.getElementById("after").style.display = "block"; }
+  function show() {
+    f.style.display = "none";
+    var c = document.querySelector(".pic-cta"); if (c) c.style.display = "none";
+    document.getElementById("after").style.display = "block";
+  }
   document.getElementById("copy").addEventListener("click", function () {
     var t = document.getElementById("prompt").textContent, b = this;
     (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = "Copied"; }, function () { b.textContent = "Select and copy above"; });
