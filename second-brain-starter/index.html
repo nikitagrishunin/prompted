@@ -72,7 +72,7 @@
     <label for="email">Email</label>
     <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@gigachad.com">
     <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
-    <label class="opt" for="optin"><input id="optin" name="optin" type="checkbox"><span>Yes, email me new Prompted guides. Optional - you get the folder either way.</span></label>
+    <label class="opt" for="optin"><input id="optin" name="optin" type="checkbox"><span>Yes, email me new Prompted guides (about once a week at most). Optional - you get the folder either way. Unsubscribe anytime.</span></label>
     <button id="go" type="submit">Send me the folder</button>
     <p class="msg" id="msg" role="status"></p>
     <p class="small">Free. You'll get the folder right now. With the box ticked, I'll also email you new guides (about once a week at most) - unsubscribe in one click anytime. <a href="../privacy/">Privacy Policy</a></p>
@@ -92,7 +92,7 @@
     <p class="small">Answer the questions by voice, then say &quot;wrap up&quot; at the end of every session. Every prompt from the video is in PROMPTS.md inside the folder.</p>
   </section>
 
-  <footer>Prompted · Your email is stored with Kit and used only for Prompted emails. · <a href="../privacy/">Privacy</a></footer>
+  <footer>Prompted · With the box ticked, your email goes to Kit for Prompted emails; otherwise it's kept only as a record of your request. · <a href="../privacy/">Privacy</a></footer>
 </main>
 <script>
 (function () {
@@ -102,7 +102,9 @@
   // Канады (там закон требует активного согласия) и неизвестного пояса - там пустая.
   var TZ = ""; try { TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
   var CA = /^America\/(Toronto|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Montreal|Whitehorse|Yellowknife|Iqaluit|Moncton|Glace_Bay|Goose_Bay|Dawson|Dawson_Creek|Fort_Nelson|Creston|Cambridge_Bay|Rankin_Inlet|Resolute|Swift_Current|Inuvik|Atikokan|Nipigon|Thunder_Bay|Rainy_River|Pangnirtung|Blanc-Sablon)$|^Canada\//;
-  var STRICT = !TZ || /^Europe\//.test(TZ) || /^Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe)$/.test(TZ) || CA.test(TZ);
+  // ЕС/ЕЭЗ вне Europe/*: Кипр, Сеута, Шпицберген, заморские регионы; UTC и Etc/* - защищённые браузеры: пустая галочка
+  var EU_EXTRA = /^(Asia\/(Nicosia|Famagusta)|Africa\/Ceuta|Arctic\/Longyearbyen|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe)|America\/(Martinique|Guadeloupe|Cayenne|Marigot|St_Barthelemy|Miquelon)|Indian\/(Reunion|Mayotte))$/;
+  var STRICT = !TZ || /^Europe\//.test(TZ) || EU_EXTRA.test(TZ) || CA.test(TZ) || /^(UTC|GMT|Etc\/.*|Universal|Zulu)$/.test(TZ);
   document.getElementById("optin").checked = !STRICT;
   function show() {
     f.style.display = "none";
