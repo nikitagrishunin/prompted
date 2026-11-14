@@ -47,6 +47,9 @@
   .pic-cta { margin-top:4px; }
   .pic-cta img { width:min(38%, 170px); }
   .bubble { font-family:"JetBrains Mono", monospace; font-size:14px; line-height:1.35; color:var(--text); background:#0c0c0c; border:1px solid var(--accent); border-radius:14px 14px 14px 4px; padding:10px 12px; margin:0 0 34px; max-width:240px; }
+  .pic.rev { flex-direction:row-reverse; justify-content:space-between; }
+  .pic.rev .bubble { border-radius:14px 14px 4px 14px; }
+  .pic-cta.below { margin:22px 0 0; }
   .pic-after { display:block; margin:0 0 14px; }
   .pic-after img { width:min(100%, 260px); border-radius:14px; border:1px solid var(--line); -webkit-mask-image:none; mask-image:none; filter:none; }
 </style>
@@ -59,7 +62,7 @@
   <p class="lead">Get the free Second Brain Starter - the folder that makes Claude Code or Codex remember you, your projects and your decisions.</p>
   <ul><li>Set it up with one sentence. The AI does the rest.</li><li>Works in Claude Code and Codex. Light version for free ChatGPT and your phone.</li><li>Every prompt from the video in one file.</li></ul>
 
-  <figure class="pic pic-cta"><img src="img/cta.webp" alt="Nikita from Prompted, arms crossed, knowing smile" width="480" height="402"><figcaption class="bubble">Yeah, bro. Grab it.</figcaption></figure>
+  
   <form id="f" novalidate>
     <label for="name">First name (optional)</label>
     <input id="name" name="first_name" autocomplete="given-name" maxlength="60">
@@ -70,6 +73,7 @@
     <p class="msg" id="msg" role="status"></p>
     <p class="small">Free. You'll get the folder right now and a short email when I post a new guide. Unsubscribe anytime.</p>
   </form>
+  <figure class="pic pic-cta rev below"><img src="img/cta.webp" alt="Nikita from Prompted, arms crossed, knowing smile" width="480" height="402"><figcaption class="bubble">Yeah, bro. Grab it.</figcaption></figure>
 
   <section class="after" id="after">
     <figure class="pic pic-after solo"><img src="img/after.webp" alt="Nikita from Prompted giving a thumbs up" width="640" height="640"></figure>
